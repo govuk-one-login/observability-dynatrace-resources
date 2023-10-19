@@ -1,0 +1,62 @@
+name: Confirm Resources are OK to deploy
+
+on:
+  pull_request:
+    types:
+        - edited
+        - opened
+        - reopened
+        - synchronize
+    branches:
+      - main
+  workflow_dispatch:
+  
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Assume AWS Role
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.DT_GH_ACTIONS_PROD_ROLE_ARN }}
+          aws-region: eu-west-2
+          role-duration-seconds: 1800
+      - name: Validate Terraform
+        run: |
+          cd terraform
+          terraform init
+          terraform fmt -recursive -diff -check
+          
+          for module in ./teams
+          do
+            cd ${module}
+            terraform init -backend=false
+            terraform validate
+            cd -
+          done
+          
+          terraform validate
+      - name: Check Deployment
+        run: |
+          cd terraform
+          terraform init
+          terraform plan -out ../plan.out
+          cd ..
+          ./scripts/check_terraform_plan.sh
+      
+      - name: Promote to Production Dynatrace
+        run: |
+          cd terraform
+          terraform init
+          terraform apply -auto-approve
+        env:
+          DYNATRACE_API_TOKEN: ${{ secrets.DYNATRACE_PROD_API_TOKEN }}
+          DYNATRACE_ENV_URL: ${{ secrets.DYNATRACE_PROD_ENV_URL }}
+
+            
