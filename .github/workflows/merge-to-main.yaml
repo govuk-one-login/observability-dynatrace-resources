@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  promote:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
