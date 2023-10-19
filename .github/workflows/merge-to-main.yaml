@@ -44,10 +44,14 @@ jobs:
           terraform plan -out ../plan.out
           cd ..
           ./scripts/check_terraform_plan.sh
-      - name: Deploy to Production
+        
+      - name: Promote to Production Dynatrace
         run: |
           cd terraform
           terraform init
           terraform apply -auto-approve
+        env:
+          DYNATRACE_API_TOKEN: ${{ secrets.DYNATRACE_PROD_API_TOKEN }}
+          DYNATRACE_ENV_URL: ${{ secrets.DYNATRACE_PROD_ENV_URL }}
 
             
