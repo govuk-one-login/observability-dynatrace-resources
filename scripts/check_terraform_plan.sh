@@ -8,9 +8,6 @@ declare -a elevated_resources=(
 
 ERROR=false
 
-pwd
-ls -al 
-
 for val in ${elevated_resources[@]}; do
 
     if grep -q $val plan.out; then
