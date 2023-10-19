@@ -48,7 +48,7 @@ jobs:
           terraform init
           export DYNATRACE_API_TOKEN=${{ secrets.DYNATRACE_PROD_API_TOKEN }}
           export DYNATRACE_ENV_URL=${{ secrets.DYNATRACE_PROD_ENV_URL }}
-          terraform plan -out ../plan.out
+          terraform plan > ../plan.out
           cd ..
           ./scripts/check_terraform_plan.sh
         
