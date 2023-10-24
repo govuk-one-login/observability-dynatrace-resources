@@ -7,17 +7,17 @@ resource "dynatrace_api_detection" "Built-In_Java_MongoDB" {
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
+      pattern = "org.bson."
+    }
+    condition {
+      base    = "FQCN"
+      matcher = "BEGINS_WITH"
       pattern = "com.mongodb."
     }
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
       pattern = "com.novus.casbah.mongodb."
-    }
-    condition {
-      base    = "FQCN"
-      matcher = "BEGINS_WITH"
-      pattern = "org.bson."
     }
   }
 }

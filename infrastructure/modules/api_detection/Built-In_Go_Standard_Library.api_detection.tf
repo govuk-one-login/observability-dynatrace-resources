@@ -7,7 +7,7 @@ resource "dynatrace_api_detection" "Built-In_Go_Standard_Library" {
     condition {
       base    = "PACKAGE"
       matcher = "BEGINS_WITH"
-      pattern = "runtime"
+      pattern = "os"
     }
     condition {
       base    = "PACKAGE"
@@ -17,17 +17,17 @@ resource "dynatrace_api_detection" "Built-In_Go_Standard_Library" {
     condition {
       base    = "PACKAGE"
       matcher = "BEGINS_WITH"
-      pattern = "os"
-    }
-    condition {
-      base    = "PACKAGE"
-      matcher = "BEGINS_WITH"
-      pattern = "net"
+      pattern = "runtime"
     }
     condition {
       base    = "PACKAGE"
       matcher = "BEGINS_WITH"
       pattern = "sync"
+    }
+    condition {
+      base    = "PACKAGE"
+      matcher = "BEGINS_WITH"
+      pattern = "net"
     }
   }
 }

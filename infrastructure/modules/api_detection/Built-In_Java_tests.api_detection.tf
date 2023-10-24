@@ -7,12 +7,12 @@ resource "dynatrace_api_detection" "Built-In_Java_tests" {
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
-      pattern = "junit.framework."
+      pattern = "org.junit."
     }
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
-      pattern = "org.junit."
+      pattern = "junit.framework."
     }
   }
 }

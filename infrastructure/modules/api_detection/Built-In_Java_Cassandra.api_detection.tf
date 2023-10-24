@@ -7,22 +7,22 @@ resource "dynatrace_api_detection" "Built-In_Java_Cassandra" {
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
-      pattern = "me.prettyprint.cassandra."
-    }
-    condition {
-      base    = "FQCN"
-      matcher = "BEGINS_WITH"
       pattern = "com.netflix.astyanax."
     }
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
-      pattern = "org.apache.cassandra."
+      pattern = "com.datastax."
     }
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
-      pattern = "com.datastax."
+      pattern = "me.prettyprint.cassandra."
+    }
+    condition {
+      base    = "FQCN"
+      matcher = "BEGINS_WITH"
+      pattern = "org.apache.cassandra."
     }
   }
 }

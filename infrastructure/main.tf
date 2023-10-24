@@ -6,6 +6,10 @@ module "api_detection" {
   source = "./modules/api_detection"
 }
 
+module "aws_credentials" {
+  source = "./modules/aws_credentials"
+}
+
 module "business_events_buckets" {
   source = "./modules/business_events_buckets"
 }
@@ -42,10 +46,6 @@ module "log_buckets" {
   source = "./modules/log_buckets"
 }
 
-module "log_events" {
-  source = "./modules/log_events"
-}
-
 module "log_processing" {
   source = "./modules/log_processing"
 }
@@ -78,6 +78,10 @@ module "ownership_config" {
   source = "./modules/ownership_config"
 }
 
+module "request_namings" {
+  source = "./modules/request_namings"
+}
+
 module "resource_attributes" {
   source = "./modules/resource_attributes"
 }
@@ -92,6 +96,10 @@ module "rum_ip_determination" {
 
 module "service_anomalies_v2" {
   source = "./modules/service_anomalies_v2"
+}
+
+module "service_external_web_request" {
+  source = "./modules/service_external_web_request"
 }
 
 module "session_replay_resource_capture" {

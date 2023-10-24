@@ -12,12 +12,12 @@ resource "dynatrace_api_detection" "Built-In_NET_Logging" {
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
-      pattern = "Microsoft.Practices.EnterpriseLibrary.Logging."
+      pattern = "log4net."
     }
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
-      pattern = "log4net."
+      pattern = "Microsoft.Practices.EnterpriseLibrary.Logging."
     }
     condition {
       base    = "FQCN"

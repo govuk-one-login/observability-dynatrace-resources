@@ -7,22 +7,22 @@ resource "dynatrace_api_detection" "Built-In_Oracle_WebLogic" {
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
-      pattern = "com.weblogic."
-    }
-    condition {
-      base    = "FQCN"
-      matcher = "BEGINS_WITH"
       pattern = "weblogic."
     }
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
-      pattern = "bea."
+      pattern = "com.bea."
     }
     condition {
       base    = "FQCN"
       matcher = "BEGINS_WITH"
-      pattern = "com.bea."
+      pattern = "com.weblogic."
+    }
+    condition {
+      base    = "FQCN"
+      matcher = "BEGINS_WITH"
+      pattern = "bea."
     }
   }
 }
