@@ -1,0 +1,43 @@
+name: Run Dynatrace Export
+# This workflow runs on a Friday morning.
+# It extracts the current configuration of Dynatrace
+# and commits it to source control
+
+on:
+  schedule:
+    # Run at 10:21 on on a Friday
+    # 21 minutes past to avoid the on the hour surge in demand
+    - cron:  '21 10 * * 5'
+  workflow_dispatch:
+
+jobs:
+  prod:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Create new branch
+        run: |
+          NOW=$(date +"%Y-%m-%d")
+          git checkout -b f/dynatrace-export-$NOW
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.4
+      - name: Run export
+        run: |
+          export DYNATRACE_TARGET_FOLDER=../infrastructure
+          export DYNATRACE_ENV_URL=${{ secrets.DYNATRACE_PROD_ENV_URL }}
+          export DYNATRACE_API_TOKEN=${{ secrets.DYNATRACE_PROD_API_TOKEN}}
+          terraform init -backend=false 
+          cd terraform
+          ls -al .terraform/providers/registry.terraform.io/dynatrace-oss/dynatrace/1.44.0/
+          .terraform/providers/registry.terraform.io/dynatrace-oss/dynatrace/1.44.0/darwin_arm64/terraform-provider-dynatrace_v1.44.0
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "Automated: Dynatrace export for $NOW"
+          delete-branch: true
