@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  prod:
+  export:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -28,16 +28,23 @@ jobs:
         with:
           terraform_version: 1.5.4
       - name: Run export
-        run: |
+        run: |     
           export DYNATRACE_TARGET_FOLDER=../infrastructure
           export DYNATRACE_ENV_URL=${{ secrets.DYNATRACE_PROD_ENV_URL }}
           export DYNATRACE_API_TOKEN=${{ secrets.DYNATRACE_PROD_API_TOKEN}}
-          terraform init -backend=false 
           cd terraform
-          ls -al .terraform/providers/registry.terraform.io/dynatrace-oss/dynatrace/1.44.0/
-          .terraform/providers/registry.terraform.io/dynatrace-oss/dynatrace/1.44.0/darwin_arm64/terraform-provider-dynatrace_v1.44.0
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          commit-message: "Automated: Dynatrace export for $NOW"
-          delete-branch: true
+          terraform init -backend=false
+          .terraform/providers/registry.terraform.io/dynatrace-oss/dynatrace/1.44.0/linux_amd64/terraform-provider-dynatrace_v1.44.0 -export
+      - name: Commit Dynatrace Export Changes
+        run: |
+          NOW=$(date +"%Y-%m-%d")
+          mkdir .ssh
+          cat <<< "${{ secrets.REPO_KEY }}" > .ssh/key
+          chmod 600 .ssh/key
+          eval `ssh-agent -s`
+          ssh-add .ssh/key
+          git config --local user.email ${{ secrets.OBSERVABILITY_TEAM_EMAIL }}
+          git config --local user.name "Observability"
+          git remote set-url origin git@github.com:govuk-one-login/observability-dynatrace-resources.git
+          git commit -am "Automated: Dynatrace export for $NOW"
+          git push --set-upstream origin f/dynatrace-export-$NOW
