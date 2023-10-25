@@ -4,10 +4,10 @@ name: Run Dynatrace Export
 # and commits it to source control
 
 on:
-  schedule:
+  # schedule:
     # Run at 10:21 on on a Friday
     # 21 minutes past to avoid the on the hour surge in demand
-    - cron:  '21 10 * * 5'
+    # - cron:  '21 10 * * 5'
   workflow_dispatch:
 
 jobs:
